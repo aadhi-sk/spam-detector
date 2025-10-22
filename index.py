@@ -28,3 +28,44 @@ def detect_spam(message: str) -> dict:
     spam_score = min(score * 10, 100)  # Cap at 100
     return {"Spam Score": spam_score, "Matches": results}
 
+def classify_message(score: int) -> str:
+    """
+    Classifies the message as HAM or SPAM based on score.
+    """
+    if score < 30:
+        return "✅ Likely Safe (HAM)"
+    elif score < 60:
+        return "⚠ Possibly Spam"
+    else:
+        return "🚨 Likely Spam"
+
+def main():
+    print("=== Simple Spam Detector (Regex-based) ===")
+    print("Enter/Paste a message to analyze (or type 'exit' to quit):\n")
+
+    while True:
+        message = input("Message:\n> ").strip()
+        if message.lower() == "exit":
+            print("Exiting Spam Detector. Goodbye!")
+            break
+
+        result = detect_spam(message)
+        label = classify_message(result["Spam Score"])
+
+        print("\n--- Analysis Result ---")
+        print(f"Spam Score: {result['Spam Score']}/100")
+        print(f"Classification: {label}")
+
+        if result["Matches"]:
+            print("\nMatched Categories:")
+            for category, count in result["Matches"].items():
+                print(f" - {category}: {count} match(es)")
+        else:
+             print(" - No spam indicators found.")
+
+        print("\n" + "=" * 40 + "\n")
+
+if _name_ == "_main_":
+    main()
+
+
